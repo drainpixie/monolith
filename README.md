@@ -1,6 +1,6 @@
-# 🌸 www
+# 🏛️ monolith
 
-a personal website and blog
+my personal website
 
 ## 🖥️ dev
 
