@@ -1,7 +1,11 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    hooks.url = "github:cachix/git-hooks.nix";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+
+    hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -18,22 +22,23 @@
           inherit system;
         });
   in {
-    lib = forAllSystems ({pkgs, ...}: {withEnv = pkgs.callPackage ./site.nix;});
-    packages = forAllSystems ({pkgs, ...}: {default = pkgs.callPackage ./site.nix {};});
+    lib = forAllSystems ({pkgs, ...}: {withEnv = pkgs.callPackage ./default.nix;});
+    packages = forAllSystems ({pkgs, ...}: {default = pkgs.callPackage ./default.nix {};});
 
     devShells = forAllSystems ({
       pkgs,
       system,
     }: let
-      check = self.checks.${system}.pre-commit;
+      inherit (self.checks.${system}.pre-commit) shellHook enabledPackages;
     in {
       default = pkgs.mkShell {
-        inherit (check) shellHook;
+        inherit shellHook;
+
         buildInputs =
-          builtins.attrValues {
+          enabledPackages
+          ++ builtins.attrValues {
             inherit (pkgs) nodejs pnpm;
-          }
-          ++ check.enabledPackages;
+          };
       };
     });
 
