@@ -6,13 +6,11 @@ import {
   KumaHeartbeatsResponse,
   MonitorWithMetrics,
 } from "./types";
+
 import { getLatestHeartbeat } from "./utils";
 
-export async function fetchStatusPageMonitors(
-  baseUrl: string,
-  slug: string,
-): Promise<KumaMonitor[]> {
-  const res = await fetch(`${baseUrl}/api/status-page/${slug}`, {
+export async function fetchStatusPageMonitors(baseURL: string, slug: string) {
+  const res = await fetch(`${baseURL}/api/status-page/${slug}`, {
     cache: "no-store",
     headers: { Accept: "application/json" },
   });
@@ -29,22 +27,18 @@ export async function fetchStatusPageMonitors(
   const monitors: KumaMonitor[] = [];
   const groups = data.publicGroupList ?? [];
 
-  for (const group of groups) {
-    for (const monitor of group.monitorList ?? []) {
-      if (typeof monitor.id === "number") {
-        monitors.push(monitor);
-      }
-    }
-  }
+  for (const group of groups)
+    for (const monitor of group.monitorList ?? [])
+      if (typeof monitor.id === "number") monitors.push(monitor);
 
   return monitors;
 }
 
 export async function fetchHeartbeats(
-  baseUrl: string,
+  baseURL: string,
   slug: string,
 ): Promise<KumaHeartbeatsResponse> {
-  const res = await fetch(`${baseUrl}/api/status-page/heartbeat/${slug}`, {
+  const res = await fetch(`${baseURL}/api/status-page/heartbeat/${slug}`, {
     cache: "no-store",
     headers: { Accept: "application/json" },
   });
@@ -56,25 +50,24 @@ export async function fetchHeartbeats(
     );
   }
 
-  const data: KumaHeartbeatsResponse = await res.json();
-  return data;
+  return res.json();
 }
 
 export async function fetchMonitorsWithMetrics(): Promise<
   MonitorWithMetrics[]
 > {
-  const baseUrl = process.env.KUMA_URL;
+  const baseURL = process.env.KUMA_URL;
   const slug = process.env.KUMA_SLUG;
 
-  if (!baseUrl) throw new Error("KUMA_URL environment variable is not set");
+  if (!baseURL) throw new Error("KUMA_URL environment variable is not set");
   if (!slug) throw new Error("KUMA_SLUG environment variable is not set");
 
   const [monitors, heartbeats] = await Promise.all([
-    fetchStatusPageMonitors(baseUrl, slug),
-    fetchHeartbeats(baseUrl, slug),
+    fetchStatusPageMonitors(baseURL, slug),
+    fetchHeartbeats(baseURL, slug),
   ]);
 
-  const result: MonitorWithMetrics[] = monitors.map((m) => {
+  return monitors.map((m) => {
     const idStr = String(m.id);
     const hbList = heartbeats.heartbeatList?.[idStr] || [];
     const latest = getLatestHeartbeat(hbList);
@@ -88,6 +81,4 @@ export async function fetchMonitorsWithMetrics(): Promise<
       currentStatus,
     };
   });
-
-  return result;
 }

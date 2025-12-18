@@ -13,10 +13,12 @@ export default function MonitorItem({ monitor }: MonitorItemProps) {
   const { text, bg } = statusColorClasses(monitor.currentStatus);
   const latest = monitor.latestHeartbeat;
 
-  const detailParts: string[] = [];
-  if (latest?.msg) detailParts.push(latest.msg);
-  if (typeof latest?.ping === "number") detailParts.push(`${latest.ping} ms`);
-  const details = detailParts.length ? detailParts.join(" · ") : "—";
+  const parts: string[] = [];
+
+  if (latest?.msg) parts.push(latest.msg);
+  if (typeof latest?.ping === "number") parts.push(`${latest.ping} ms`);
+
+  const details = parts.length ? parts.join(" · ") : "—";
 
   return (
     <li className="[&>*]:mr-2 text-nowrap">
@@ -42,8 +44,8 @@ export default function MonitorItem({ monitor }: MonitorItemProps) {
       )}
 
       <span
-        title={`Status: ${statusText(monitor.currentStatus)}`}
-        className={`text-xs ${text} ${bg} px-1.5 rounded flex-shrink-0`}
+        title={`Service is currently ${statusText(monitor.currentStatus).toLowerCase()}`}
+        className={`badge ${text} ${bg}`}
       >
         {statusText(monitor.currentStatus)}
       </span>
@@ -56,7 +58,7 @@ export default function MonitorItem({ monitor }: MonitorItemProps) {
       </span>
 
       <span
-        title="Uptime (last 24h)"
+        title="Uptime for the last 24 hours"
         className="text-foreground text-xs flex-shrink-0"
       >
         {formatPercent(monitor.uptime24h)}

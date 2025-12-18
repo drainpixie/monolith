@@ -1,21 +1,28 @@
-// NOTE: API definitions are approximate
+// WARN: API definitions are approximate
 
-type Status = 0 | 1 | 2 | 3;
+export enum Status {
+  DOWN = 0,
+  UP = 1,
+  PENDING = 2,
+  MAINTENANCE = 3,
+}
 
 export interface KumaMonitor {
   id: number;
+  url?: string;
   name: string;
   type?: string;
-  url?: string;
+}
+
+interface KumaStatusPagePublicGroupListData {
+  id: number;
+  name: string;
+  weight: number;
+  monitorList: KumaMonitor[];
 }
 
 export interface KumaStatusPageData {
-  publicGroupList?: {
-    id: number;
-    name: string;
-    weight: number;
-    monitorList: KumaMonitor[];
-  }[];
+  publicGroupList?: KumaStatusPagePublicGroupListData[];
 }
 
 export interface KumaHeartbeat {

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en",
-    url: "https://drainpixie.me",
+    url: "https://drainpixie.xyz",
     siteName: "Faye Keller",
     title: "Faye Keller",
     description:

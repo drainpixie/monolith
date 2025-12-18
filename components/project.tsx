@@ -15,8 +15,9 @@ export function Project({ name, description, href }: IProjectProps) {
         rel="noopener noreferrer"
         className="!not-italic"
       >
-        {name}, <span>{description}</span>
-      </a>
+        {name}
+      </a>{" "}
+      {description}
     </li>
   );
 }

@@ -51,16 +51,7 @@ export default function Home() {
             name="Docile"
             description="a document tamer"
           />
-          <Project
-            href="https://github.com/drainpixie/zero"
-            name="Zero"
-            description="a dynamic web server"
-          />
-          <Project
-            href="https://github.com/drainpixie/notaio"
-            name="Notaio"
-            description="an OSS knowledgebase"
-          />
+
           <Project
             href="https://github.com/amperser/proselint"
             name="Proselint"

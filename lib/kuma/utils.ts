@@ -1,34 +1,44 @@
-import { KumaHeartbeat } from "./types";
+import { KumaHeartbeat, Status } from "./types";
 
-export function statusText(status?: number) {
-  switch (status) {
-    case 1:
-      return "UP";
-    case 0:
-      return "DOWN";
-    case 2:
-      return "PENDING";
-    case 3:
-      return "MAINTENANCE";
-    default:
-      return "UNKNOWN";
-  }
+interface StatusColour {
+  text: string;
+  bg: string;
 }
 
-export function statusColorClasses(status?: number) {
-  const map: Record<number, { text: string; bg: string }> = {
-    1: { text: "text-green-700", bg: "bg-green-100" },
-    0: { text: "text-red-700", bg: "bg-red-100" },
-    3: { text: "text-orange-600", bg: "bg-orange-100" },
-    2: { text: "text-gray-600", bg: "bg-gray-200" },
-  };
+const STATUS_COLOURS: Record<Status, StatusColour> = {
+  [Status.UP]: {
+    text: "text-green-700",
+    bg: "bg-green-100",
+  },
+  [Status.DOWN]: {
+    text: "text-red-700",
+    bg: "bg-red-100",
+  },
+  [Status.MAINTENANCE]: {
+    text: "text-orange-600",
+    bg: "bg-orange-100",
+  },
+  [Status.PENDING]: {
+    text: "text-gray-600",
+    bg: "bg-gray-200",
+  },
+};
 
-  return (
-    (status != undefined && map[status]) || {
-      text: "text-gray-600",
-      bg: "bg-gray-200",
-    }
-  );
+const DEFAULT_COLOURS: StatusColour = {
+  text: "text-gray-600",
+  bg: "bg-gray-200",
+};
+
+export function statusText(status?: number) {
+  return typeof status === "number" && Status[status] !== undefined
+    ? Status[status]
+    : "UNKNOWN";
+}
+
+export function statusColorClasses(status?: Status): StatusColour {
+  return status !== undefined && status in STATUS_COLOURS
+    ? STATUS_COLOURS[status]
+    : DEFAULT_COLOURS;
 }
 
 export function getLatestHeartbeat(

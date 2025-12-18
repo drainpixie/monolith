@@ -29,7 +29,7 @@ export default async function Home() {
           <li>I can type an average of 150 words per minute</li>
           <li>
             My favourite colour is{" "}
-            <span className="px-1 py-[0.1em] bg-favourite">
+            <span className="badge bg-favourite">
               oklch(0.8398 0.0561 5.82)
             </span>
           </li>
@@ -39,13 +39,30 @@ export default async function Home() {
       <div>
         <h2>Hardware</h2>
         <ul>
-          <li>iPhone 13</li>
-          <li>Moondrop CHU II</li>
-          <li>Nintendo DSi Red</li>
-          <li>PlayStation 4 Slim</li>
-          <li>DELL Latitude 5490</li>
-          <li>Nintendo DSi XL Burgundy</li>
-          <li>Nintendo 2DS Red Groudon</li>
+          <li>
+            iPhone 13 <span className="badge bg-purple-200">main</span>
+          </li>
+          <li>
+            Sony WF-C500 <span className="badge bg-red-200">gym</span>
+          </li>
+          <li>
+            Latitude 5490 <span className="badge bg-yellow-200">main</span>
+          </li>
+          <li>
+            Moondrop CHU II <span className="badge bg-red-200">main</span>
+          </li>
+          <li>
+            PlayStation 4 Slim <span className="badge bg-green-200">main</span>
+          </li>
+          <li>
+            2DS Red Groudon <span className="badge bg-green-200">main</span>
+          </li>
+          <li>
+            DSi XL Burgundy <span className="badge bg-green-100">extra</span>
+          </li>
+          <li>
+            DSi Red <span className="badge bg-green-100">extra</span>
+          </li>
         </ul>
       </div>
 
